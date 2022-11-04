@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "checkJs": true,
+        "paths": {
+            "c/utilsString": [ "./utilsString/utilsString.js" ],
+            "c/utilsArray": [ "./utilsArray/utilsArray.js" ]
+        }
+    },
+    "include": [
+        "**/*",
+        "../../../../.sfdx/typings/lwc/**/*.d.ts"
+    ],
+    "paths": {
+        "c/*": [
+            "*"
+        ]
+    },
+    "typeAcquisition": {
+        "include": [
+            "jest"
+        ]
+    }
+}
