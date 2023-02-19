@@ -3,6 +3,7 @@
         "experimentalDecorators": true,
         "checkJs": true,
         "paths": {
+            "c/utilsObject": [ "./utilsObject/utilsObject.js" ],
             "c/utilsString": [ "./utilsString/utilsString.js" ],
             "c/utilsArray": [ "./utilsArray/utilsArray.js" ]
         }
