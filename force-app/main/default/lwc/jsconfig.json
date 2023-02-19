@@ -3,9 +3,10 @@
         "experimentalDecorators": true,
         "checkJs": true,
         "paths": {
+            "c/utilsArray": [ "./utilsArray/utilsArray.js" ],
+            "c/utilsLds": [ "./utilsLds/utilsLds.js" ],
             "c/utilsObject": [ "./utilsObject/utilsObject.js" ],
-            "c/utilsString": [ "./utilsString/utilsString.js" ],
-            "c/utilsArray": [ "./utilsArray/utilsArray.js" ]
+            "c/utilsString": [ "./utilsString/utilsString.js" ]
         }
     },
     "include": [
