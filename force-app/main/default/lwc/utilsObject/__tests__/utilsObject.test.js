@@ -1,9 +1,11 @@
 import {
     isDefined,
+    isFunction,
     isNumber,
     isObject,
     objectFilterProperties,
-    objectMapProperties
+    objectMapProperties,
+    unproxy
 } from 'c/utilsObject';
 
 describe('sldt-utils-object', () => {
@@ -103,6 +105,59 @@ describe('sldt-utils-object', () => {
             expect(isObject([])).toBe(true);
         });
     });
+    describe("isFunction - check the value is a number but not nan/inf", () => {
+        it('isFunction - null returns false', () => {
+            expect(isFunction(null)).toBe(false);
+        });
+        it('isFunction - undefined returns false', () => {
+            expect(isFunction(undefined)).toBe(false);
+        });
+        it('isFunction - NaN returns false', () => {
+            expect(isFunction(NaN)).toBe(false);
+        });
+        it('isFunction - Infinity returns false', () => {
+            expect(isFunction(Infinity)).toBe(false);
+        });
+        it('isFunction - 1 returns false', () => {
+            expect(isFunction(1)).toBe(false);
+        });
+        it('isFunction - 0 returns false', () => {
+            expect(isFunction(0)).toBe(false);
+        });
+        it('isFunction - \'\' returns false', () => {
+            expect(isFunction('')).toBe(false);
+        });
+        it('isFunction - \'test\' returns false', () => {
+            expect(isFunction('test')).toBe(false);
+        });
+        it('isFunction - {} returns false', () => {
+            expect(isFunction({})).toBe(false);
+        });
+        it('isFunction - [] returns false', () => {
+            expect(isFunction([])).toBe(false);
+        });
+        it('isFunction - function(){} returns false', () => {
+            expect(isFunction((function(){}))).toBe(true);
+        });
+        it('isFunction - ()=>{} returns false', () => {
+            expect(isFunction((()=>{}))).toBe(true);
+        });
+    });
+    describe('unproxy - remove proxy from object', () => {
+        it('unproxy - remain primitives as is', () => {
+            expect(unproxy(1)).toStrictEqual(1);
+            expect(unproxy("a")).toStrictEqual("a");
+            expect(unproxy(null)).toStrictEqual(null);
+        });
+        it('unproxy - remain data types as is', () => {
+            expect(unproxy({})).toStrictEqual({});
+            expect(unproxy([])).toStrictEqual([]);
+            expect(unproxy({a: 1, b: [1,2,3,4,5]})).toStrictEqual({a: 1, b: [1,2,3,4,5]});
+        });
+        it('unproxy - don\'t care about other types', () => {
+            expect(unproxy({a: 1, b: function(){}})).toStrictEqual({a: 1});
+        });
+    })
     describe('objectFilterProperties - filter the properties of the object by list or function', () => {
         it('objectFilterProperties - filter empty object returns the same', () => {
             expect(objectFilterProperties(1, () => true)).toBe(1);

@@ -7,15 +7,22 @@
 import {
     isDefined,
     isNumber,
-    isObject
+    isObject,
+    isFunction,
 } from "./utilsObjectValidation";
 
-import { objectFilterProperties, objectMapProperties } from "./utilsObjectTransform";
+import {
+    objectFilterProperties,
+    objectMapProperties,
+    unproxy,
+} from "./utilsObjectTransform";
 
 export {
     isDefined,
     isNumber,
     isObject,
+    isFunction,
     objectFilterProperties,
     objectMapProperties,
+    unproxy,
 };

@@ -24,3 +24,12 @@ export const isObject = (source) => {
 export const isNumber = (source) => {
     return _isDefined(source) && typeof source === "number" && window.isFinite(source);
 }
+
+/**
+ * @description returns `true` if value is a function
+ * @param {any} source value to check
+ * @returns {source is function}
+ */
+export const isFunction = (source) => {
+    return _isDefined(source) && typeof source === "function";
+}

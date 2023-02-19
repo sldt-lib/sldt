@@ -1,10 +1,16 @@
 import { isObject } from "./utilsObjectValidation";
 
 /**
- * @template T object property type
- * @template V return value
- * @typedef {(value: T, key?: ObjectKeyType, source?:{[key:ObjectKeyType]: T})=>V} ObjectAcceptorFunction
+ * @template T
+ * @description removes proxy from object by serializing and deserializing it back.
+ * WARNING: use it for only data objects, other types like regex and function will corrupt.
+ * Naming - I took method name from https://docs.jboss.org/hibernate/orm/4.3/javadocs/org/hibernate/engine/spi/PersistenceContext.html#unproxy%28java.lang.Object%29
+ * @param {T} object object to remove proxy from
+ * @returns {T}
  */
+export const unproxy = (object) => {
+    return JSON.parse(JSON.stringify(object));
+}
 
 /**
  * @template T
