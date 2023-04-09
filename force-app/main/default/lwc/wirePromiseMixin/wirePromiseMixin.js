@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { LightningElement } from "lwc";
+import { isDefined } from "c/utilsObject";
 
 /**
  * @typedef {{
@@ -27,7 +28,7 @@ export const WirePromiseMixin = (BaseClass) => {
         __promiseDataByName = {};
 
         __initWire = (name) => {
-            if (this.__promiseDataByName[name] === undefined) {
+            if (!isDefined(this.__promiseDataByName[name])) {
                 let resolveFunction;
                 let rejectFunction;
                 let resultPromise = new Promise((resolve, reject) => {
@@ -51,7 +52,7 @@ export const WirePromiseMixin = (BaseClass) => {
             this.__initWire(name);
             this.__promiseDataByName[name].response = response;
             if (("data" in response) && ("error" in response)) {
-                if (response.data !== undefined) {
+                if ( response.data !== undefined) {
                     this.__promiseDataByName[name].resolveFunction(response.data);
                 } else if (response.error !== undefined) {
                     this.__promiseDataByName[name].rejectFunction(response.error);
@@ -67,6 +68,9 @@ export const WirePromiseMixin = (BaseClass) => {
         }
 
         resetWire = (name) => {
+            if (isDefined(this.__promiseDataByName[name])) {
+                this.__promiseDataByName[name] = undefined;
+            }
             this.__initWire(name);
             return this.getWire(name);
         }
