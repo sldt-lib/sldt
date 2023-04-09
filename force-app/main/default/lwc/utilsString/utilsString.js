@@ -19,7 +19,7 @@ export const generateUUID = () => {
 /**
 * @description Checks that argument is a string
 * @param {any} probableString a value that might be a string
-* @returns {boolean} `true` if variable is a string
+* @returns {probableString is string} `true` if variable is a string
 */
 export const isString = (probableString) => {
     return typeof probableString === 'string';
@@ -28,7 +28,7 @@ export const isString = (probableString) => {
 /**
 * @description Checks that argument is a string and it is filled with anything
 * @param {any} probableString a value that might be a string and needs the check
-* @returns {boolean}
+* @returns {probableString is string}
 */
 export const isStringFilled = (probableString) => {
     return (
@@ -41,7 +41,7 @@ export const isStringFilled = (probableString) => {
 * @description Checks that argument is a string and it is filled with not only whitespace characters.
 * Similar to `String.isNotBlank` in Apex.
 * @param {any} probableString a value that might be a string and needs the check
-* @returns {boolean}
+* @returns {probableString is string}
 */
 export const isStringNotBlank = (probableString) => {
     return (
@@ -49,5 +49,3 @@ export const isStringNotBlank = (probableString) => {
         probableString.trim().length > 0
     )
 };
-
-
