@@ -6,7 +6,8 @@
             "c/utilsArray": [ "./utilsArray/utilsArray.js" ],
             "c/utilsLds": [ "./utilsLds/utilsLds.js" ],
             "c/utilsObject": [ "./utilsObject/utilsObject.js" ],
-            "c/utilsString": [ "./utilsString/utilsString.js" ]
+            "c/utilsString": [ "./utilsString/utilsString.js" ],
+            "c/wirePromiseMixin": [ "./wirePromiseMixin/wirePromiseMixin.js" ]
         }
     },
     "include": [
