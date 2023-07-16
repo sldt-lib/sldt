@@ -17,7 +17,7 @@ export const isArray = _isArray;
 /**
  * @description Checks if the variable is an array and it has items
  * @param {any} probableArray the variable to test
- * @returns {boolean}
+ * @returns {probableArray is any[]}
  */
 export const isArrayFilled = (probableArray) => (_isArray(probableArray) && probableArray.length > 0);
 

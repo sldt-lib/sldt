@@ -1,9 +1,17 @@
+/*
+ * Contains utility methods for working with validation of different types of objects
+ * Author: Yakov Veromeev
+ * License: MIT
+ */
+
 const _isDefined = (source) => {
     return source !== undefined && source !== null;
 };
 
 /**
  * @description returns true if argument is not `null` or `undefined`
+ * @param {any} source value to check
+ * @returns {boolean}
  */
 export const isDefined = _isDefined;
 

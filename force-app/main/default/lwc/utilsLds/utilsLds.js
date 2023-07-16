@@ -1,3 +1,9 @@
+/*
+ * Contains utility methods for retrieving error messages from LDS and Apex errors
+ * Author: Yakov Veromeev
+ * License: MIT
+ */
+
 import { isDefined, isObject } from "c/utilsObject";
 import { isString, isStringFilled } from "c/utilsString";
 import { isArray } from "c/utilsArray";

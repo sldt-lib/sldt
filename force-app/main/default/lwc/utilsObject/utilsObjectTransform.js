@@ -1,15 +1,25 @@
+/*
+ * Contains utility methods for working with transformation of different types of objects
+ * Author: Yakov Veromeev
+ * License: MIT
+ */
+
 import { isObject } from "./utilsObjectValidation";
 
 /**
  * @template T
  * @description removes proxy from object by serializing and deserializing it back.
- * WARNING: use it for only data objects, other types like regex and function will corrupt.
+ * WARNING: use it for only data objects, other types like regex and class instances will corrupt.
  * Naming - I took method name from https://docs.jboss.org/hibernate/orm/4.3/javadocs/org/hibernate/engine/spi/PersistenceContext.html#unproxy%28java.lang.Object%29
  * @param {T} object object to remove proxy from
  * @returns {T}
  */
 export const unproxy = (object) => {
-    return JSON.parse(JSON.stringify(object));
+    if (typeof object === "object") {
+        // TODO test and replace with deep copy
+        return JSON.parse(JSON.stringify(object));
+    }
+    return object;
 }
 
 /**

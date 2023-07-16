@@ -1,3 +1,9 @@
+/*
+ * Contains a mixin that helps handling data returned from @wire methods in imperative way
+ * Author: Yakov Veromeev
+ * License: MIT
+ */
+
 // eslint-disable-next-line no-unused-vars
 import { LightningElement } from "lwc";
 import { isDefined } from "c/utilsObject";

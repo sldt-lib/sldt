@@ -17,19 +17,19 @@ export const generateUUID = () => {
 }
 
 /**
-* @description Checks that argument is a string
-* @param {any} probableString a value that might be a string
-* @returns {probableString is string} `true` if variable is a string
-*/
+ * @description Checks that argument is a string
+ * @param {any} probableString a value that might be a string
+ * @returns {probableString is string} `true` if variable is a string
+ */
 export const isString = (probableString) => {
     return typeof probableString === 'string';
 }
 
 /**
-* @description Checks that argument is a string and it is filled with anything
-* @param {any} probableString a value that might be a string and needs the check
-* @returns {probableString is string}
-*/
+ * @description Checks that argument is a string and it is filled with anything
+ * @param {any} probableString a value that might be a string and needs the check
+ * @returns {probableString is string}
+ */
 export const isStringFilled = (probableString) => {
     return (
         typeof probableString === 'string' &&
@@ -38,11 +38,11 @@ export const isStringFilled = (probableString) => {
 };
 
 /**
-* @description Checks that argument is a string and it is filled with not only whitespace characters.
-* Similar to `String.isNotBlank` in Apex.
-* @param {any} probableString a value that might be a string and needs the check
-* @returns {probableString is string}
-*/
+ * @description Checks that argument is a string and it is filled with not only whitespace characters.
+ * Similar to `String.isNotBlank` in Apex.
+ * @param {any} probableString a value that might be a string and needs the check
+ * @returns {probableString is string}
+ */
 export const isStringNotBlank = (probableString) => {
     return (
         typeof probableString === 'string' &&
