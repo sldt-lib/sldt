@@ -1,0 +1,64 @@
+<template>
+    <section
+        role="dialog"
+        tabindex="-1"
+        class={modalClassList}
+        aria-labelledby={headingId}
+        aria-modal="true"
+        aria-describedby={contentId}
+    >
+        <div class="slds-modal__container">
+            <div class="slds-is-relative">
+                <div if:true={spinner} class="slds-spinner_container">
+                    <div class="slds-spinner_brand slds-spinner slds-spinner_medium" role="alert">
+                        <span class="slds-assistive-text">Loading...</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+                <header if:false={withHeader} class="slds-modal__header slds-modal__header_empty">
+                    <label if:true={withCloseButton} class="slds-assistive-text" for={closeButtonId}>Close</label>
+                    <lightning-button-icon
+                        if:true={withCloseButton}
+                        id={closeButtonId}
+                        class="slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        icon-name="utility:close"
+                        size="large"
+                        variant="bare-inverse"
+                        alternative-text="close"
+                        title="close"
+                        onclick={handleCloseButtonClick}
+                    ></lightning-button-icon>
+                </header>
+                <header if:true={withHeader} class="slds-modal__header">
+                    <label if:true={withCloseButton} class="slds-assistive-text" for={closeButtonId}>Close</label>
+                    <lightning-button-icon
+                        if:true={withCloseButton}
+                        class="slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        id={closeButtonId}
+                        icon-name="utility:close"
+                        size="large"
+                        variant="bare-inverse"
+                        alternative-text="close"
+                        title="close"
+                        onclick={handleCloseButtonClick}
+                    ></lightning-button-icon>
+                    <h2 id={headingId} class="slds-modal__title slds-hyphenate">
+                        <slot name="header"></slot>
+                    </h2>
+                    <p if:true={withHeadingTagline} class="slds-m-top_x-small">
+                        <slot name="header-tagline"></slot>
+                    </p>
+                </header>
+                <div if:true={_withBody} class="slds-modal__content slds-p-around_medium" id={contentId}>
+                    <slot></slot>
+                    <slot name="body"></slot>
+                </div>
+                <footer if:true={withFooter} class="slds-modal__footer">
+                    <slot name="footer"></slot>
+                </footer>
+            </div>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
