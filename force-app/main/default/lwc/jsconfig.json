@@ -7,7 +7,8 @@
             "c/utilsLds": [ "./utilsLds/utilsLds.js" ],
             "c/utilsObject": [ "./utilsObject/utilsObject.js" ],
             "c/utilsString": [ "./utilsString/utilsString.js" ],
-            "c/wirePromiseMixin": [ "./wirePromiseMixin/wirePromiseMixin.js" ]
+            "c/wirePromiseMixin": [ "./wirePromiseMixin/wirePromiseMixin.js" ],
+            "c/lightningElement": [ "./lightningElement/lightningElement.js" ]
         }
     },
     "include": [
