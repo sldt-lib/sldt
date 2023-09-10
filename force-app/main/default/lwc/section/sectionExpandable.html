@@ -1,0 +1,28 @@
+<template>
+    <div class={sectionClassList}>
+        <h3 class="slds-section__title">
+            <slot name="before-title"></slot>
+            <label class="slds-assistive-text" for="expandable-section-id">{label}</label>
+            <button
+                id="expandable-section-id"
+                class="slds-button slds-section__title-action"
+                aria-controls="expandable-section-content"
+                aria-expanded={_isOpen}
+                onclick={handleExpandClick}
+            >
+                <lightning-icon
+                    class="slds-section__title-action-icon slds-button__icon slds-button__icon_left"
+                    icon-name="utility:switch"
+                    alternative-text="toggle"
+                    size="x-small"
+                ></lightning-icon>
+                <span class="slds-truncate" title={label}>{label}</span>
+                <slot name="title"></slot>
+            </button>
+            <slot name="after-title"></slot>
+        </h3>
+        <div aria-hidden={isClosed} class="slds-section__content" id="expandable-section-content">
+            <slot></slot>
+        </div>
+    </div>
+</template>

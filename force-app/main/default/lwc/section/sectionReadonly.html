@@ -1,0 +1,15 @@
+<template>
+    <div class={sectionClassList}>
+        <h3 class="slds-section__title">
+            <slot name="before-title"></slot>
+            <span class="slds-truncate slds-var-p-horizontal_small slds-theme_shade section-title-static" title={label}>
+                {label}
+                <slot name="title"></slot>
+            </span>
+            <slot name="after-title"></slot>
+        </h3>
+        <div aria-hidden={isClosed} class="slds-section__content">
+            <slot></slot>
+        </div>
+    </div>
+</template>
