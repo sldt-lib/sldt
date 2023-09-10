@@ -9,10 +9,30 @@ describe('c-modal', () => {
         }
     });
 
-    it('init modal - no uuid - uuid generated', async () => {
+    it('init modal - no header - no headingAdded', async () => {
         const element = createElement('c-modal', {is: Modal});
         document.body.appendChild(element);
-        expect(element.uuid).toBeDefined();
-        expect(element.uuid.length).toBeGreaterThan(4);
+
+        const heading = element.shadowRoot.querySelector("header.slds-modal__header");
+        expect(heading).toBeNull();
+    });
+    it('init modal - heading via attribute - heading exists', async () => {
+        const element = createElement('c-modal', {is: Modal});
+        element.heading = "Test Heading";
+        document.body.appendChild(element);
+
+        const heading = element.shadowRoot.querySelector("header.slds-modal__header");
+        expect(heading).not.toBeNull();
+        expect(heading.textContent).toBe("Test Heading")
+    });
+    it('init modal - heading via slot - heading exists', async () => {
+        const element = createElement('c-modal', {is: Modal});
+        element.withHeader = true;
+
+        document.body.appendChild(element);
+
+        const heading = element.shadowRoot.querySelector("header.slds-modal__header");
+        expect(heading).not.toBeNull();
+        expect(heading.style.padding).toBe("0px");
     });
 });

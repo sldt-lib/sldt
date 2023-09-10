@@ -3,24 +3,21 @@
         role="dialog"
         tabindex="-1"
         class={modalClassList}
-        aria-labelledby={headingId}
+        style={modalContainerStyleModification}
+        aria-labelledby="modal-heading"
         aria-modal="true"
-        aria-describedby={contentId}
+        aria-describedby="modal-content-container"
     >
         <div class="slds-modal__container">
             <div class="slds-is-relative">
-                <div if:true={spinner} class="slds-spinner_container">
-                    <div class="slds-spinner_brand slds-spinner slds-spinner_medium" role="alert">
-                        <span class="slds-assistive-text">Loading...</span>
-                        <div class="slds-spinner__dot-a"></div>
-                        <div class="slds-spinner__dot-b"></div>
-                    </div>
-                </div>
-                <header if:false={withHeader} class="slds-modal__header slds-modal__header_empty">
-                    <label if:true={withCloseButton} class="slds-assistive-text" for={closeButtonId}>Close</label>
+                <!-- Spinner for blocking the modal -->
+                <lightning-spinner if:true={spinner}></lightning-spinner>
+
+                <!-- close button -->
+                <template if:true={withCloseButton}>
+                    <label class="slds-assistive-text" for="modal-close-cross-button-headless">Close</label>
                     <lightning-button-icon
-                        if:true={withCloseButton}
-                        id={closeButtonId}
+                        id="modal-close-cross-button-headless"
                         class="slds-button_icon slds-modal__close slds-button_icon-inverse"
                         icon-name="utility:close"
                         size="large"
@@ -29,36 +26,39 @@
                         title="close"
                         onclick={handleCloseButtonClick}
                     ></lightning-button-icon>
-                </header>
-                <header if:true={withHeader} class="slds-modal__header">
-                    <label if:true={withCloseButton} class="slds-assistive-text" for={closeButtonId}>Close</label>
-                    <lightning-button-icon
-                        if:true={withCloseButton}
-                        class="slds-button_icon slds-modal__close slds-button_icon-inverse"
-                        id={closeButtonId}
-                        icon-name="utility:close"
-                        size="large"
-                        variant="bare-inverse"
-                        alternative-text="close"
-                        title="close"
-                        onclick={handleCloseButtonClick}
-                    ></lightning-button-icon>
-                    <h2 id={headingId} class="slds-modal__title slds-hyphenate">
-                        <slot name="header"></slot>
+                </template>
+
+                <!-- Header -->
+                <header if:true={displayHeader} class="slds-modal__header" style={additionalHeaderStyleModification}>
+
+                    <!-- Heading -->
+                    <h2 if:true={heading} id="modal-heading" class="slds-modal__title slds-hyphenate">
+                        {heading}
                     </h2>
-                    <p if:true={withHeadingTagline} class="slds-m-top_x-small">
+
+                    <!-- Custom Heading -->
+                    <slot name="header"></slot>
+
+                    <!-- Heading tagline -->
+                    <p if:true={displayHeadingTagline} class="slds-var-m-top_x-small">
+                        <lightning-formatted-rich-text if:true={headingTagline} value={headingTagline}>
+                        </lightning-formatted-rich-text>
                         <slot name="header-tagline"></slot>
                     </p>
                 </header>
-                <div if:true={_withBody} class="slds-modal__content slds-p-around_medium" id={contentId}>
+
+                <!-- Modal body -->
+                <div if:true={_withBody} id="modal-content-container" class="slds-modal__content slds-var-p-around_medium">
                     <slot></slot>
                     <slot name="body"></slot>
                 </div>
+
+                <!-- Modal footer -->
                 <footer if:true={withFooter} class="slds-modal__footer">
                     <slot name="footer"></slot>
                 </footer>
             </div>
         </div>
     </section>
-    <div class="slds-backdrop slds-backdrop_open"></div>
+    <div class="slds-backdrop slds-backdrop_open" style={backdropStyleModification}></div>
 </template>

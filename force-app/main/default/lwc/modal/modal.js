@@ -5,65 +5,128 @@
  */
 
 import { api } from 'lwc';
-import { LightningElement } from 'c/lightningElement';
-import { generateUUID, isStringFilled } from 'c/utilsString';
+import { LightningElement, } from 'c/lightningElement';
+
+import { isStringFilled, } from 'c/utilsString';
+import { isNumber, } from 'c/utilsObject';
+
+/**
+ * @description an offset between z indexes of the modals. one for the modal backdrop, one for modal content and one additional.
+ * So that modal 1 gets 9000 for backdrop and 9001 for content. Second will get 9003 and 9004 respectively.
+ */
+const Z_INDEX_OFFSET = 3;
 
 export default class Modal extends LightningElement {
 
-    _uuid;
+    /**
+     * @description a common value to get each modal z index from
+     */
+    static lastStyleZIndexValue = 9000;
 
     /**
-     * @description UUID to use as id in the markup, important for ARIA describe support
-     * @type {string}
+     * @description The z-index of the modal backdrop. The modal container gets z index = _zIndex + 1
+     * Each modal will get its own z index in order to overlay each other and not collapse the markup
+     * @type {number}
      */
-    @api set uuid(newUuid) {
-        this._uuid = newUuid;
-    }
-    get uuid() { return this._uuid; }
+    _zIndex
+
     /**
+     * @description Shows a white X-cross button in the top-right corner outside of the modal.
+     * Generates `close` notification on clicked
      * @type {boolean}
      */
     @api withCloseButton = false;
 
     /**
+     * @description Shows modal header to pass the header content through `header` slot
      * @type {boolean}
      */
     @api withHeader = false;
 
     /**
+     * @description Modal heading text.
+     * You can put there text directly in case it is a simple text, not a complex markup.
+     * If you use this, setting `withHeader` is unnecessary.
+     * @type {string}
+     */
+    @api heading;
+
+    /**
+     * @description Shows modal tag line - a small text below the modal heading.
+     * Set this flag to pass the markup there through `header-tagline` slot
      * @type {boolean}
      */
     @api withHeadingTagline = false;
 
     /**
+     * @description modal heading tagline text - a small text below the modal heading.
+     * You can put there a text or a rich text.
+     * If you pass the value there, the heading tagline is shown automatically,
+     * you don't need to set `withHeadingTagline` flag
+     */
+    @api headingTagline;
+
+    /**
+     * @description Shows footer. You can pass there markup using `footer` slot
      * @type {boolean}
      */
     @api withFooter = false;
 
     /**
+     * @description Show a spinner above the whole modal to block the content from interaction in loading/processing phases
      * @type {boolean}
      */
     @api spinner = false;
 
     /**
+     * @description internal boolean to check if modal needs a body. Impacted by `withBody` and `withoutBody` attributes
      * @type {boolean}
      */
     _withBody = true;
 
     /**
-     * @type {"small" | "medium" | "large" | null}
+     * @description Modal width. Default is small
+     * @type {"small" | "medium" | "large" | "full" | null}
      */
     @api size;
 
-    get contentId() {return this._uuid + '-contentId'; }
-    get headingId() {return this._uuid + '-headingId'; }
-    get closeButtonId() {return this._uuid + '-closeButtonId'; }
+    /**
+     * @description returns true if a normal heading should display
+     */
+    get displayHeader() {
+        return this.withHeader || isStringFilled(this.heading);
+    }
+
+    /**
+     * @description returns true if heading tag line is passed from attribute or slot
+     */
+    get displayHeadingTagline() {
+        return this.withHeadingTagline || isStringFilled(this.headingTagline);
+    }
+
+    /**
+     * @description additional style in case header is custom. In this case it should not hold internal padding
+     */
+    get additionalHeaderStyleModification() {
+        if (this.withHeader && !isStringFilled(this.heading)) {
+            return `padding: 0;`;
+        }
+        return "";
+    }
+
+    get backdropStyleModification() {
+        return isNumber(this._zIndex) ? `z-index: ${this._zIndex}` : "";
+    }
+    get modalContainerStyleModification() {
+        return isNumber(this._zIndex) ? `z-index: ${this._zIndex+1}` : "";
+    }
 
     get modalClassList() {
         const sizeClassName = (
             this.size === "small" ? " slds-modal_small" :
             this.size === "medium" ? " slds-modal_medium" :
             this.size === "large" ? " slds-modal_large" :
+            this.size === "full" ? " slds-modal_full" :
             ""
         );
         return "slds-modal slds-fade-in-open" + sizeClassName;
@@ -115,13 +178,17 @@ export default class Modal extends LightningElement {
     }
 
     connectedCallback() {
-        if (!isStringFilled(this._uuid)) {
-            this._uuid = generateUUID();
+        this._zIndex = Modal.lastStyleZIndexValue;
+        Modal.lastStyleZIndexValue = Modal.lastStyleZIndexValue + Z_INDEX_OFFSET;
+    }
+
+    disconnectedCallback() {
+        if (this._zIndex + Z_INDEX_OFFSET === Modal.lastStyleZIndexValue) {
+            Modal.lastStyleZIndexValue = Modal.lastStyleZIndexValue - Z_INDEX_OFFSET;
         }
     }
 
     handleCloseButtonClick() {
         this.fire("close");
     }
-
 }
