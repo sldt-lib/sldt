@@ -9,7 +9,7 @@ import { isObject } from "c/utilsObject";
  */
 const _classListStringToArray = classListString => {
     if (isStringFilled(classListString)) {
-        return classListString.split(/\s/);
+        return classListString.split(/\s+/);
     }
     return [];
 }
@@ -24,12 +24,13 @@ export const composeClasses = (defaultClasses, classMap) => {
     if (!isObject(classMap)) {
         classMap = {};
     }
-    return [
-        ..._classListStringToArray(defaultClasses),
-        ...filterMap(
+    classMap[defaultClasses] = true;
+    const classSet = new Set(
+        filterMap(
             Object.entries(classMap),
             ([,isClassListVisible]) => isClassListVisible,
             ([classList]) => _classListStringToArray(classList)
         ).flat()
-    ].join(" ");
+    );
+    return Array.from(classSet).join(" ");
 }

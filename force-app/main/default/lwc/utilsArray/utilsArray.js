@@ -4,6 +4,8 @@
  * License MIT
  */
 
+import { isFunction } from "c/utilsObject";
+
 // internal shortcut
 const _isArray = Array.isArray;
 
@@ -119,11 +121,7 @@ export const group = (source, key, value = undefined, regroup, getInitialGroup =
             const elementValue = value(element, index, array);
 
             let currentGroup = groups[elementKey];
-            if (
-                currentGroup === undefined &&
-                getInitialGroup !== undefined &&
-                typeof getInitialGroup === "function"
-            ) {
+            if (currentGroup === undefined && isFunction(getInitialGroup)) {
                 currentGroup = getInitialGroup();
             }
 

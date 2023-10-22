@@ -4,6 +4,7 @@
         "checkJs": true,
         "paths": {
             "c/utilsArray": [ "./utilsArray/utilsArray.js" ],
+            "c/utilsMarkup": [ "./utilsMarkup/utilsMarkup.js" ],
             "c/utilsLds": [ "./utilsLds/utilsLds.js" ],
             "c/utilsObject": [ "./utilsObject/utilsObject.js" ],
             "c/utilsString": [ "./utilsString/utilsString.js" ],
