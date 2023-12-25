@@ -16,8 +16,18 @@ import { isObject } from "./utilsObjectValidation";
  */
 export const unproxy = (object) => {
     if (typeof object === "object") {
-        // TODO test and replace with deep copy
-        return JSON.parse(JSON.stringify(object));
+        if (Array.isArray(object)) {
+            const unproxied = object.map(entry => unproxy(entry));
+            Object.setPrototypeOf(unproxied, Object.getPrototypeOf(object));
+            return unproxied;
+        } else if (isObject(object)) {
+            const unproxied = Object.fromEntries(
+                Object.entries(object)
+                    .map(([key, value]) => [key, unproxy(value)])
+            );
+            Object.setPrototypeOf(unproxied, Object.getPrototypeOf(object));
+            return unproxied;
+        }
     }
     return object;
 }
