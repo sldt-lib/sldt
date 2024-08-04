@@ -1,13 +1,23 @@
 /*
- * Modal component with standard SLDS markup
- * Author: Yakov Veromeev
- * License: MIT
+ * Copyright 2024 Yakay Verameyeu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import { api } from 'lwc';
 import { LightningElement, } from 'c/lightningElement';
 
-import { composeClasses } from 'c/utilsMarkup';
+import { classMap } from 'c/utilsMarkup';
 
 import TEMPLATE_EXPANDABLE from "./sectionExpandable.html";
 import TEMPLATE_READONLY from "./sectionReadonly.html";
@@ -15,7 +25,6 @@ import TEMPLATE_READONLY from "./sectionReadonly.html";
 /**
  * @description Section element to display expandable section
  * Has both declarative api as parameter and methods api: `open`, `close`, `toggle`
- * 
  * @see https://www.lightningdesignsystem.com/components/expandable-section/
  */
 export default class Section extends LightningElement {
@@ -94,7 +103,7 @@ export default class Section extends LightningElement {
      * @description Section classes - calculated depending on state of the section
      */
     get sectionClassList() {
-        return composeClasses("slds-section", {
+        return classMap("slds-section", {
             "slds-is-open": this._isOpen,
             "slds-box": this.boxContent,
         });
@@ -116,7 +125,7 @@ export default class Section extends LightningElement {
      * @description Handles click of the section title button (for expandable ones).
      * Fires `toggle` event with details {isOpen:boolean}
      */
-    handleExpandClick = () => {
+    handleExpandClick() {
         this._toggle();
         this.fire("toggle", {isOpen: this._isOpen});
     }
@@ -124,7 +133,7 @@ export default class Section extends LightningElement {
     /**
      * @description changes the state of the section (open/closed) to another
      */
-    _toggle = () => {
+    _toggle() {
         this._isOpen = !this._isOpen;
     }
 }

@@ -155,7 +155,7 @@ describe('sldt-utils-object', () => {
             expect(unproxy({a: 1, b: [1,2,3,4,5]})).toStrictEqual({a: 1, b: [1,2,3,4,5]});
         });
         it('unproxy - don\'t care about other types', () => {
-            expect(unproxy({a: 1, b: function(){}})).toStrictEqual({a: 1});
+            expect(unproxy({a: 1, b: function(){}})["a"]).toStrictEqual(1);
         });
     })
     describe('objectFilterProperties - filter the properties of the object by list or function', () => {

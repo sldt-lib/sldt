@@ -11,10 +11,10 @@
         <div class="slds-modal__container">
             <div class="slds-is-relative">
                 <!-- Spinner for blocking the modal -->
-                <lightning-spinner if:true={spinner}></lightning-spinner>
+                <lightning-spinner lwc:if={spinner}></lightning-spinner>
 
                 <!-- close button -->
-                <template if:true={withCloseButton}>
+                <template lwc:if={withCloseButton}>
                     <label class="slds-assistive-text" for="modal-close-cross-button-headless">Close</label>
                     <lightning-button-icon
                         id="modal-close-cross-button-headless"
@@ -29,10 +29,10 @@
                 </template>
 
                 <!-- Header -->
-                <header if:true={displayHeader} class="slds-modal__header" style={additionalHeaderStyleModification}>
+                <header lwc:if={displayHeader} class="slds-modal__header" style={additionalHeaderStyleModification}>
 
                     <!-- Heading -->
-                    <h2 if:true={heading} id="modal-heading" class="slds-modal__title slds-hyphenate">
+                    <h2 lwc:if={heading} id="modal-heading" class="slds-modal__title slds-hyphenate">
                         {heading}
                     </h2>
 
@@ -40,21 +40,21 @@
                     <slot name="header"></slot>
 
                     <!-- Heading tagline -->
-                    <p if:true={displayHeadingTagline} class="slds-var-m-top_x-small">
-                        <lightning-formatted-rich-text if:true={headingTagline} value={headingTagline}>
+                    <p lwc:if={displayHeadingTagline} class="slds-var-m-top_x-small">
+                        <lightning-formatted-rich-text lwc:if={headingTagline} value={headingTagline}>
                         </lightning-formatted-rich-text>
                         <slot name="header-tagline"></slot>
                     </p>
                 </header>
 
                 <!-- Modal body -->
-                <div if:true={_withBody} id="modal-content-container" class="slds-modal__content slds-var-p-around_medium">
+                <div lwc:if={_withBody} id="modal-content-container" class="slds-modal__content slds-var-p-around_medium">
                     <slot></slot>
                     <slot name="body"></slot>
                 </div>
 
                 <!-- Modal footer -->
-                <footer if:true={withFooter} class="slds-modal__footer">
+                <footer lwc:if={withFooter} class="slds-modal__footer">
                     <slot name="footer"></slot>
                 </footer>
             </div>
