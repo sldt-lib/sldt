@@ -14,7 +14,8 @@
     },
     "include": [
         "**/*",
-        "../../../../.sfdx/typings/lwc/**/*.d.ts"
+        "../../../../.sfdx/typings/lwc/**/*.d.ts",
+        "../../../../typings/*"
     ],
     "paths": {
         "c/*": [
