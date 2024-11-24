@@ -4,7 +4,6 @@ import { WirePromiseMixin } from 'c/wirePromiseMixin';
 describe('c-wire-promise-mixin', () => {
     // impossible to construct Lightning Element right there, so use an empty class instead
     class A {}
-    // @ts-ignore
     class TestClass extends WirePromiseMixin(A) {
         wiredData;
         wiredError;

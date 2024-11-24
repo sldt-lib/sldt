@@ -15,38 +15,34 @@
  */
 
 import { isStringFilled } from "c/utilsString";
-import { filterMap } from "c/utilsArray";
-import { isObject } from "c/utilsObject";
-
-/**
- * @description converts CSS class string to array
- * @param {string?} classListString string with default classes
- * @returns {string[]}
- */
-const _classListStringToArray = classListString => {
-    if (isStringFilled(classListString)) {
-        return classListString.split(/\s+/);
-    }
-    return [];
-}
 
 /**
  * @description Composes CSS class list by default string and object of additional classes to boolean values
- * @param {string} defaultClasses string with default class list
- * @param {{[className:string]: boolean}?} classMap additional classes with conditional adding
+ * @param {string|Record<string, boolean>} defaultClassesOrMap string with default class list
+ * @param {Record<string, boolean>?} additionalMap additional classes with conditional adding
  * @returns {string}
+ * @public
  */
-export const composeClasses = (defaultClasses, classMap) => {
-    if (!isObject(classMap)) {
-        classMap = {};
+export const classMap = (defaultClassesOrMap, additionalMap = {}) => {
+    /** @type {Record<string, boolean>} */
+    let resultMap;
+
+    if (isStringFilled(defaultClassesOrMap)) {
+        resultMap = additionalMap ?? {};
+        resultMap[defaultClassesOrMap] = true;
+    } else {
+        resultMap = defaultClassesOrMap ?? {};
     }
-    classMap[defaultClasses] = true;
-    const classSet = new Set(
-        filterMap(
-            Object.entries(classMap),
-            ([,isClassListVisible]) => isClassListVisible,
-            ([classList]) => _classListStringToArray(classList)
-        ).flat()
-    );
-    return Array.from(classSet).join(" ");
+
+    return _composeClasses(resultMap);
+}
+
+const _composeClasses = (classMap) => {
+    let result = [];
+    for (let key of Object.keys(classMap)) {
+        if (classMap[key]) {
+            result.push(key);
+        }
+    }
+    return result.join(" ");
 }

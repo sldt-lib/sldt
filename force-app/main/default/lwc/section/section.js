@@ -17,7 +17,7 @@
 import { api } from 'lwc';
 import { LightningElement, } from 'c/lightningElement';
 
-import { composeClasses } from 'c/utilsMarkup';
+import { classMap } from 'c/utilsMarkup';
 
 import TEMPLATE_EXPANDABLE from "./sectionExpandable.html";
 import TEMPLATE_READONLY from "./sectionReadonly.html";
@@ -25,7 +25,6 @@ import TEMPLATE_READONLY from "./sectionReadonly.html";
 /**
  * @description Section element to display expandable section
  * Has both declarative api as parameter and methods api: `open`, `close`, `toggle`
- * 
  * @see https://www.lightningdesignsystem.com/components/expandable-section/
  */
 export default class Section extends LightningElement {
@@ -37,7 +36,9 @@ export default class Section extends LightningElement {
     @api expandable = false;
 
     /**
-     * @description Section label, **required**
+     * @description Section label, required
+     * @requires
+     * @type {string}`
      */
     @api label;
 
@@ -50,15 +51,12 @@ export default class Section extends LightningElement {
      * <sldt-section is-open label="Static and always open"></sldt-section>
      * <sldt-section is-open={isSectionOpen} label="Static and will open by isSectionOpen value"></sldt-section>
      */
-    @api set isOpen(newValue) {
-        this._isOpen = newValue;
-    }
-    get isOpen() {
-        return this._isOpen;
-    }
+    @api set isOpen(newValue) { this._isOpen = newValue; }
+    get isOpen() { return this._isOpen; }
 
     /**
-     * @description Show
+     * @description Show box border around the section
+     * @type {boolean}
      */
     @api boxContent = false;
 
@@ -92,6 +90,14 @@ export default class Section extends LightningElement {
     }
 
     /**
+     * @description icon name that will be shown in the section title
+     * @returns {string}
+     */
+    get iconName() {
+        return this._isOpen ? 'utility:chevrondown' : 'utility:chevronright';
+    }
+
+    /**
      * @description By default section is closed
      */
     _isOpen = false;
@@ -104,7 +110,7 @@ export default class Section extends LightningElement {
      * @description Section classes - calculated depending on state of the section
      */
     get sectionClassList() {
-        return composeClasses("slds-section", {
+        return classMap("slds-section", {
             "slds-is-open": this._isOpen,
             "slds-box": this.boxContent,
         });
@@ -121,12 +127,11 @@ export default class Section extends LightningElement {
         return TEMPLATE_READONLY;
     }
 
-
     /**
      * @description Handles click of the section title button (for expandable ones).
      * Fires `toggle` event with details {isOpen:boolean}
      */
-    handleExpandClick = () => {
+    handleExpandClick() {
         this._toggle();
         this.fire("toggle", {isOpen: this._isOpen});
     }
@@ -134,7 +139,7 @@ export default class Section extends LightningElement {
     /**
      * @description changes the state of the section (open/closed) to another
      */
-    _toggle = () => {
+    _toggle() {
         this._isOpen = !this._isOpen;
     }
 }

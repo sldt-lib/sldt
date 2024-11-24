@@ -32,7 +32,6 @@ const TOAST_VARIANT = {
     ERROR: "error",
 };
 
-
 /**
  * @typedef {"dismissible"|"pester"|"sticky"} ToastMode
  */
@@ -40,14 +39,14 @@ const TOAST_VARIANT = {
 /**
  * Enhanced Lightning Element class to use instead of standard LWC one
  */
-class LightningElement extends NavigationMixin(BaseLightningElement) {
+export class LightningElement extends NavigationMixin(BaseLightningElement) {
 
     /**
      * @description a shortcut for a single element selector in template
      * @param {string} selector query selector
      * @returns {Element?}
      */
-    $ = selector => {
+    $(selector) {
         return this.template.querySelector(selector);
     }
 
@@ -56,13 +55,74 @@ class LightningElement extends NavigationMixin(BaseLightningElement) {
      * @param {string} selector query selector
      * @returns {Element[]}
      */
-    $$ = selector => {
+    $$(selector) {
         return Array.from(this.template.querySelectorAll(selector));
     }
 
     /**
+     * @description a shortcut for a single element selector in slots
+     * @param {string} selector query selector
+     * @returns {Element?}
+     */
+    slot$(selector) {
+        return this.querySelector(selector);
+    }
+
+    /**
+     * @description a shortcut for a multiple element selector in slots
+     * @param {string} selector query selector
+     * @returns {Element[]}
+     */
+    slot$$(selector) {
+        return Array.from(this.querySelectorAll(selector));
+    }
+
+    __apiPrivatePropertyPrefix = '_';
+
+    /**
+     * Proxy handler for `@api get / set` parameters. Reduces boilerplate of internal property value pass
+     * Use it within the setter with a single argument of a new value to assign the value to internal variable
+     * Use it within the getter with 0 arguments to get a stored internally value
+     * The internal value field is named the same way as public one with underscore prefix. If you desire another prefix, set it in the __apiPrivatePropertyPrefix field;
+     * Internally, api method uses `new Error().stack` to get the name of the property.
+     * DO NOT this method in a promise handler as it starts a new stack trace and it's impossible to capture the property name
+     * @param  {...any} args arguments. If one is passed, method works from setter
+     * @returns any
+     * @example
+     * ```javascript
+     * // internal prop is _recordId
+     * set recordId(value) { this.api(value); this.doPostAssignLogic(); }
+     * get recordId() { console.log(this.api()); return this.api(); }
+     *
+     * // DO NOT USE IN TIMEOUT/PROMISE HANDLERS
+     * get param() { return fetchInfo().then(() => {return this.api();}); } // cannot find the getter name, returns undefined
+     * set param(value) { sanitizeValueOnServer(value).then(result => this.api(result)); } // cannot find setter name, doesn't save anything
+     * ```
+     */
+    api(...args) {
+        const isSet = (args.length === 1);
+        const stackTraceLinePrefix = isSet ? 'set ' : 'get ';
+        let propName = (new Error().stack)
+            .split('\n')
+            .find((line) => (line.indexOf(stackTraceLinePrefix) !== -1));
+        if(isStringFilled(propName)) {
+            propName = propName.trim();
+            propName = (
+                this.__apiPrivatePropertyPrefix +
+                propName
+                    .substring(propName.indexOf(stackTraceLinePrefix) + 4)
+                    .split(/[^\w\$]/)[0]
+            );
+            if (isSet) {
+                this[propName] = args[0];
+            }
+            return this[propName];
+        }
+    }
+
+    /**
      * @description a shortcut to fire the custom event. You can fire event by name, by a specific constructor, or pass the event itself
-     * @param {string|(new (...args: any[])=> CustomEvent)|CustomEvent} eventName event name if it is a custom event or constructor for specific events or the event itself
+     * @param {string|(new (...args: any[])=> CustomEvent)|CustomEvent|Event} eventName event name if it is a custom event or constructor for specific events or the event itself
      * @param {any} detail detail object for custom events or an argument for custom constructor
      * @param {boolean} bubbles
      * @param {boolean} composed
@@ -75,10 +135,12 @@ class LightningElement extends NavigationMixin(BaseLightningElement) {
      * this.fire(new ShowToastEvent({title, message, variant}));
      * ```
      */
-    fire(eventName, detail, bubbles = false, composed = false) {
+    fire(eventName, detail = null, bubbles = false, composed = false) {
         if (isFunction(eventName)) {
             // eventName is constructor
-            let event = detail !== undefined ? new eventName(detail) : new eventName();
+            // usually when SF uses their custom events (toast, flows), they have a single setting param
+            // the same behavior is expected from the events passed to fire method with constructor
+            let event = new eventName(detail);
             this.dispatchEvent(event);
         } else if (isStringFilled(eventName)) {
             this.dispatchEvent(new CustomEvent(eventName, {detail, bubbles, composed}));
@@ -97,6 +159,7 @@ class LightningElement extends NavigationMixin(BaseLightningElement) {
     toastSuccess(title, message, messageData, mode = "dismissible") {
         this.toast(TOAST_VARIANT.SUCCESS, title, message, messageData, mode);
     }
+
     /**
      * @description sends warning toast
      * @param {string} title toast title
@@ -107,6 +170,7 @@ class LightningElement extends NavigationMixin(BaseLightningElement) {
     toastWarning(title, message, messageData, mode = "dismissible") {
         this.toast(TOAST_VARIANT.WARNING, title, message, messageData, mode);
     }
+
     /**
      * @description sends info toast
      * @param {string} title toast title
@@ -117,6 +181,7 @@ class LightningElement extends NavigationMixin(BaseLightningElement) {
     toastInfo(title, message, messageData, mode = "dismissible") {
         this.toast(TOAST_VARIANT.INFO, title, message, messageData, mode);
     }
+
     /**
      * @description sends error toast
      * @param {string} title toast title
@@ -127,6 +192,7 @@ class LightningElement extends NavigationMixin(BaseLightningElement) {
     toastError(title, message, messageData, mode = "dismissible") {
         this.toast(TOAST_VARIANT.ERROR, title, message, messageData, mode);
     }
+
     /**
      * @description sends custom toast
      * @param {ToastVariant} variant toast variant, stands for color and meaning of the toast
@@ -158,5 +224,3 @@ class LightningElement extends NavigationMixin(BaseLightningElement) {
         return this[NavigationMixin.GenerateUrl](pageRef);
     }
 }
-
-export { LightningElement };
