@@ -3,5 +3,5 @@
 }
 
 .slds-section.slds-box.slds-is-open .slds-section__content {
-    padding-bottom: var(--lwc-spacingXSmall,0.5rem);
+    padding-bottom: var(--lwc-spacingXSmall, 0.5rem);
 }

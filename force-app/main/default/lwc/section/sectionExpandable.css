@@ -1,1 +1,5 @@
-@import "./section.css"
+@import "./section.css";
+
+.section-icon {
+    margin-top: -6px;
+}
